@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 function App() {
 
-  const API = "http://localhost:8000/tasks";
-
+  //const API = "http://localhost:8000/tasks";
+  const API = "https://smart-task-board-tuh9.onrender.com/tasks";
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Work");
