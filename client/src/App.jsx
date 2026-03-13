@@ -9,7 +9,6 @@ function App() {
   const [category, setCategory] = useState("Work");
   const [priority, setPriority] = useState("Medium");
 
-  // โหลด tasks
   const loadTasks = async () => {
     const res = await fetch(API);
     const data = await res.json();
@@ -20,20 +19,19 @@ function App() {
     loadTasks();
   }, []);
 
-  // เพิ่ม task
   const addTask = async () => {
 
     if (!title) {
-      alert("กรอกชื่องานก่อน");
+      alert("Please enter task name");
       return;
     }
 
-    const res = await fetch(API, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+    const res = await fetch(API,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
       },
-      body: JSON.stringify({
+      body:JSON.stringify({
         title,
         category,
         priority
@@ -42,76 +40,102 @@ function App() {
 
     const newTask = await res.json();
 
-    setTasks([...tasks, newTask]);
+    setTasks([...tasks,newTask]);
     setTitle("");
   };
 
-  // toggle status
   const toggleStatus = (id) => {
 
-    const updated = tasks.map(task => {
-      if (task._id === id) {
-        return {
+    const updated = tasks.map(task=>{
+      if(task._id === id){
+        return{
           ...task,
           status: task.status === "Pending" ? "Completed" : "Pending"
-        };
+        }
       }
-      return task;
-    });
+      return task
+    })
 
-    setTasks(updated);
+    setTasks(updated)
+
   };
 
-  // ⭐ DELETE TASK
   const deleteTask = async (id) => {
 
-    await fetch(`${API}/${id}`, {
-      method: "DELETE"
-    });
+    await fetch(`${API}/${id}`,{
+      method:"DELETE"
+    })
 
-    const updated = tasks.filter(task => task._id !== id);
-    setTasks(updated);
-  };
+    setTasks(tasks.filter(task=>task._id !== id))
 
-  return (
+  }
+
+  const priorityColor = (p) => {
+
+    if(p==="High") return "#ef4444"
+    if(p==="Medium") return "#f59e0b"
+    return "#16a34a"
+
+  }
+
+  return(
 
     <div style={{
-      fontFamily: "Arial",
-      background: "#f4f6f8",
-      minHeight: "100vh",
-      padding: "40px"
+      fontFamily:"Arial",
+      background:"linear-gradient(135deg,#667eea,#764ba2)",
+      minHeight:"100vh",
+      padding:"40px"
     }}>
 
       <div style={{
-        maxWidth: "700px",
-        margin: "auto",
-        background: "white",
-        padding: "30px",
-        borderRadius: "10px",
-        boxShadow: "0 10px 20px rgba(0,0,0,0.1)"
+        maxWidth:"750px",
+        margin:"auto",
+        background:"white",
+        padding:"35px",
+        borderRadius:"12px",
+        boxShadow:"0 15px 35px rgba(0,0,0,0.2)"
       }}>
 
-        <h1 style={{textAlign:"center"}}>Smart Task Board</h1>
+        <h1 style={{
+          textAlign:"center",
+          marginBottom:"25px",
+          color:"#333"
+        }}>
+          Smart Task Board
+        </h1>
 
-        <div style={{display:"flex", gap:"10px", marginBottom:"20px"}}>
+        <div style={{
+          display:"flex",
+          gap:"10px",
+          marginBottom:"25px"
+        }}>
 
           <input
-            placeholder="Task name"
+            placeholder="Enter task..."
             value={title}
             onChange={(e)=>setTitle(e.target.value)}
-            style={{flex:1,padding:"10px"}}
+            style={{
+              flex:1,
+              padding:"12px",
+              borderRadius:"6px",
+              border:"1px solid #ddd"
+            }}
           />
 
           <select onChange={(e)=>setCategory(e.target.value)}>
+
             <option>Work</option>
             <option>Personal</option>
             <option>Study</option>
+
           </select>
 
           <select onChange={(e)=>setPriority(e.target.value)}>
+
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
+
           </select>
 
           <button
@@ -120,8 +144,10 @@ function App() {
               background:"#2563eb",
               color:"white",
               border:"none",
-              padding:"10px 15px",
-              borderRadius:"5px"
+              padding:"12px 18px",
+              borderRadius:"6px",
+              cursor:"pointer",
+              fontWeight:"bold"
             }}
           >
             Add
@@ -129,42 +155,53 @@ function App() {
 
         </div>
 
-        {tasks.map(task => (
+        {tasks.map(task=>(
 
           <div key={task._id}
             style={{
-              background:"#f9fafb",
-              padding:"15px",
-              borderRadius:"8px",
-              marginBottom:"10px",
+              background:"#f8fafc",
+              padding:"18px",
+              borderRadius:"10px",
+              marginBottom:"12px",
               display:"flex",
               justifyContent:"space-between",
-              alignItems:"center"
+              alignItems:"center",
+              borderLeft:`6px solid ${priorityColor(task.priority)}`
             }}
           >
 
             <div>
 
-              <div style={{fontWeight:"bold"}}>
+              <div style={{
+                fontWeight:"bold",
+                fontSize:"16px"
+              }}>
                 {task.title}
               </div>
 
-              <div style={{fontSize:"13px",color:"#555"}}>
-                {task.category} • {task.priority}
+              <div style={{
+                fontSize:"13px",
+                color:"#666"
+              }}>
+                {task.category}
               </div>
 
             </div>
 
-            <div style={{display:"flex", gap:"10px"}}>
+            <div style={{
+              display:"flex",
+              gap:"8px"
+            }}>
 
               <button
                 onClick={()=>toggleStatus(task._id)}
                 style={{
-                  background: task.status === "Completed" ? "#16a34a" : "#f59e0b",
+                  background: task.status === "Completed" ? "#22c55e" : "#f59e0b",
                   color:"white",
                   border:"none",
-                  padding:"6px 12px",
-                  borderRadius:"5px"
+                  padding:"7px 12px",
+                  borderRadius:"5px",
+                  cursor:"pointer"
                 }}
               >
                 {task.status}
@@ -173,11 +210,12 @@ function App() {
               <button
                 onClick={()=>deleteTask(task._id)}
                 style={{
-                  background:"#dc2626",
+                  background:"#ef4444",
                   color:"white",
                   border:"none",
-                  padding:"6px 12px",
-                  borderRadius:"5px"
+                  padding:"7px 12px",
+                  borderRadius:"5px",
+                  cursor:"pointer"
                 }}
               >
                 Delete
@@ -192,7 +230,9 @@ function App() {
       </div>
 
     </div>
-  );
+
+  )
+
 }
 
 export default App;
