@@ -64,7 +64,6 @@ function App() {
   const deleteTask = async(id)=>{
 
     const confirmDelete = window.confirm("Delete this task?")
-
     if(!confirmDelete) return
 
     await fetch(`${API}/${id}`,{
@@ -75,45 +74,40 @@ function App() {
 
   }
 
-  const priorityColor = (p)=>{
-    if(p==="High") return "#ef4444"
-    if(p==="Medium") return "#f59e0b"
-    return "#22c55e"
-  }
-
   const completed = tasks.filter(t=>t.status==="Completed").length
 
   return(
 
     <div style={{
-      fontFamily:"Arial",
-      background:"linear-gradient(135deg,#4facfe,#00f2fe)",
+      fontFamily:"Inter, Arial",
+      background:"#f5f5f5",
       minHeight:"100vh",
-      padding:"40px"
+      padding:"50px"
     }}>
 
       <div style={{
-        maxWidth:"800px",
+        maxWidth:"650px",
         margin:"auto",
-        background:"white",
-        padding:"35px",
-        borderRadius:"15px",
-        boxShadow:"0 20px 40px rgba(0,0,0,0.2)"
+        background:"#ffffff",
+        padding:"40px",
+        borderRadius:"12px",
+        boxShadow:"0 5px 15px rgba(0,0,0,0.05)"
       }}>
 
         <h1 style={{
           textAlign:"center",
-          marginBottom:"5px"
+          marginBottom:"10px",
+          fontWeight:"600"
         }}>
           Smart Task Board
         </h1>
 
         <p style={{
           textAlign:"center",
-          color:"#666",
-          marginBottom:"25px"
+          color:"#888",
+          marginBottom:"30px"
         }}>
-          Tasks {completed} / {tasks.length} Completed
+          {completed} of {tasks.length} tasks completed
         </p>
 
         <div style={{
@@ -123,24 +117,38 @@ function App() {
         }}>
 
           <input
-            placeholder="Enter task..."
+            placeholder="Add new task..."
             value={title}
             onChange={(e)=>setTitle(e.target.value)}
             style={{
               flex:1,
               padding:"12px",
-              borderRadius:"6px",
-              border:"1px solid #ddd"
+              border:"1px solid #ddd",
+              borderRadius:"6px"
             }}
           />
 
-          <select onChange={(e)=>setCategory(e.target.value)}>
+          <select
+            onChange={(e)=>setCategory(e.target.value)}
+            style={{
+              border:"1px solid #ddd",
+              borderRadius:"6px",
+              padding:"10px"
+            }}
+          >
             <option>Work</option>
             <option>Personal</option>
             <option>Study</option>
           </select>
 
-          <select onChange={(e)=>setPriority(e.target.value)}>
+          <select
+            onChange={(e)=>setPriority(e.target.value)}
+            style={{
+              border:"1px solid #ddd",
+              borderRadius:"6px",
+              padding:"10px"
+            }}
+          >
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
@@ -149,13 +157,12 @@ function App() {
           <button
             onClick={addTask}
             style={{
-              background:"#2563eb",
+              background:"#111",
               color:"white",
               border:"none",
-              padding:"12px 18px",
+              padding:"12px 16px",
               borderRadius:"6px",
-              cursor:"pointer",
-              fontWeight:"bold"
+              cursor:"pointer"
             }}
           >
             Add
@@ -167,44 +174,31 @@ function App() {
 
           <div key={task._id}
             style={{
-              background:"#ffffff",
-              padding:"20px",
-              borderRadius:"12px",
-              marginBottom:"15px",
+              background:"#fafafa",
+              padding:"16px",
+              borderRadius:"8px",
+              marginBottom:"10px",
               display:"flex",
               justifyContent:"space-between",
               alignItems:"center",
-              borderLeft:`8px solid ${priorityColor(task.priority)}`,
-              boxShadow:"0 8px 18px rgba(0,0,0,0.08)"
+              border:"1px solid #eee"
             }}
           >
 
             <div>
 
               <div style={{
-                fontWeight:"bold",
-                fontSize:"16px"
+                fontWeight:"500",
+                marginBottom:"3px"
               }}>
                 {task.title}
               </div>
 
               <div style={{
-                fontSize:"13px",
-                color:"#666"
+                fontSize:"12px",
+                color:"#888"
               }}>
-                {task.category}
-
-                <span style={{
-                  marginLeft:"10px",
-                  background:priorityColor(task.priority),
-                  color:"white",
-                  padding:"3px 8px",
-                  borderRadius:"5px",
-                  fontSize:"11px"
-                }}>
-                  {task.priority}
-                </span>
-
+                {task.category} • {task.priority}
               </div>
 
             </div>
@@ -217,12 +211,13 @@ function App() {
               <button
                 onClick={()=>toggleStatus(task._id)}
                 style={{
-                  background: task.status === "Completed" ? "#22c55e" : "#f59e0b",
-                  color:"white",
+                  background: task.status === "Completed" ? "#22c55e" : "#e5e5e5",
+                  color: task.status === "Completed" ? "white" : "#333",
                   border:"none",
-                  padding:"7px 12px",
+                  padding:"6px 10px",
                   borderRadius:"5px",
-                  cursor:"pointer"
+                  cursor:"pointer",
+                  fontSize:"12px"
                 }}
               >
                 {task.status}
@@ -234,9 +229,10 @@ function App() {
                   background:"#ef4444",
                   color:"white",
                   border:"none",
-                  padding:"7px 12px",
+                  padding:"6px 10px",
                   borderRadius:"5px",
-                  cursor:"pointer"
+                  cursor:"pointer",
+                  fontSize:"12px"
                 }}
               >
                 Delete
