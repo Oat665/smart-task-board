@@ -17,7 +17,13 @@ router.post("/", async (req, res) => {
 
 // UPDATE status
 router.put("/:id", async (req, res) => {
-  const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new:true});
+  const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.json(task);
+});
+
+// ⭐ DELETE task (เพิ่มตรงนี้)
+router.delete("/:id", async (req, res) => {
+  const task = await Task.findByIdAndDelete(req.params.id);
   res.json(task);
 });
 
