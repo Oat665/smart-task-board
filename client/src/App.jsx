@@ -4,25 +4,25 @@ function App() {
 
   const API = "https://smart-task-board-tuh9.onrender.com/tasks";
 
-  const [tasks, setTasks] = useState([]);
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Work");
-  const [priority, setPriority] = useState("Medium");
+  const [tasks,setTasks] = useState([]);
+  const [title,setTitle] = useState("");
+  const [category,setCategory] = useState("Work");
+  const [priority,setPriority] = useState("Medium");
 
-  const loadTasks = async () => {
+  const loadTasks = async()=>{
     const res = await fetch(API);
     const data = await res.json();
     setTasks(data);
-  };
+  }
 
-  useEffect(() => {
+  useEffect(()=>{
     loadTasks();
-  }, []);
+  },[])
 
-  const addTask = async () => {
+  const addTask = async()=>{
 
-    if (!title) {
-      alert("Please enter task name");
+    if(!title){
+      alert("Please enter task");
       return;
     }
 
@@ -36,21 +36,22 @@ function App() {
         category,
         priority
       })
-    });
+    })
 
     const newTask = await res.json();
 
     setTasks([...tasks,newTask]);
     setTitle("");
-  };
 
-  const toggleStatus = (id) => {
+  }
+
+  const toggleStatus = (id)=>{
 
     const updated = tasks.map(task=>{
       if(task._id === id){
         return{
           ...task,
-          status: task.status === "Pending" ? "Completed" : "Pending"
+          status: task.status === "Pending" ? "Completed":"Pending"
         }
       }
       return task
@@ -58,9 +59,13 @@ function App() {
 
     setTasks(updated)
 
-  };
+  }
 
-  const deleteTask = async (id) => {
+  const deleteTask = async(id)=>{
+
+    const confirmDelete = window.confirm("Delete this task?")
+
+    if(!confirmDelete) return
 
     await fetch(`${API}/${id}`,{
       method:"DELETE"
@@ -70,39 +75,46 @@ function App() {
 
   }
 
-  const priorityColor = (p) => {
-
+  const priorityColor = (p)=>{
     if(p==="High") return "#ef4444"
     if(p==="Medium") return "#f59e0b"
-    return "#16a34a"
-
+    return "#22c55e"
   }
+
+  const completed = tasks.filter(t=>t.status==="Completed").length
 
   return(
 
     <div style={{
       fontFamily:"Arial",
-      background:"linear-gradient(135deg,#667eea,#764ba2)",
+      background:"linear-gradient(135deg,#4facfe,#00f2fe)",
       minHeight:"100vh",
       padding:"40px"
     }}>
 
       <div style={{
-        maxWidth:"750px",
+        maxWidth:"800px",
         margin:"auto",
         background:"white",
         padding:"35px",
-        borderRadius:"12px",
-        boxShadow:"0 15px 35px rgba(0,0,0,0.2)"
+        borderRadius:"15px",
+        boxShadow:"0 20px 40px rgba(0,0,0,0.2)"
       }}>
 
         <h1 style={{
           textAlign:"center",
-          marginBottom:"25px",
-          color:"#333"
+          marginBottom:"5px"
         }}>
           Smart Task Board
         </h1>
+
+        <p style={{
+          textAlign:"center",
+          color:"#666",
+          marginBottom:"25px"
+        }}>
+          Tasks {completed} / {tasks.length} Completed
+        </p>
 
         <div style={{
           display:"flex",
@@ -123,19 +135,15 @@ function App() {
           />
 
           <select onChange={(e)=>setCategory(e.target.value)}>
-
             <option>Work</option>
             <option>Personal</option>
             <option>Study</option>
-
           </select>
 
           <select onChange={(e)=>setPriority(e.target.value)}>
-
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
-
           </select>
 
           <button
@@ -159,14 +167,15 @@ function App() {
 
           <div key={task._id}
             style={{
-              background:"#f8fafc",
-              padding:"18px",
-              borderRadius:"10px",
-              marginBottom:"12px",
+              background:"#ffffff",
+              padding:"20px",
+              borderRadius:"12px",
+              marginBottom:"15px",
               display:"flex",
               justifyContent:"space-between",
               alignItems:"center",
-              borderLeft:`6px solid ${priorityColor(task.priority)}`
+              borderLeft:`8px solid ${priorityColor(task.priority)}`,
+              boxShadow:"0 8px 18px rgba(0,0,0,0.08)"
             }}
           >
 
@@ -184,6 +193,18 @@ function App() {
                 color:"#666"
               }}>
                 {task.category}
+
+                <span style={{
+                  marginLeft:"10px",
+                  background:priorityColor(task.priority),
+                  color:"white",
+                  padding:"3px 8px",
+                  borderRadius:"5px",
+                  fontSize:"11px"
+                }}>
+                  {task.priority}
+                </span>
+
               </div>
 
             </div>
