@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 
 function App() {
 
-  //const API = "http://localhost:8000/tasks";
   const API = "https://smart-task-board-tuh9.onrender.com/tasks";
+
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Work");
   const [priority, setPriority] = useState("Medium");
 
-  // โหลด task จาก server
+  // โหลด tasks
   const loadTasks = async () => {
     const res = await fetch(API);
     const data = await res.json();
@@ -59,6 +59,17 @@ function App() {
       return task;
     });
 
+    setTasks(updated);
+  };
+
+  // ⭐ DELETE TASK
+  const deleteTask = async (id) => {
+
+    await fetch(`${API}/${id}`, {
+      method: "DELETE"
+    });
+
+    const updated = tasks.filter(task => task._id !== id);
     setTasks(updated);
   };
 
@@ -144,18 +155,35 @@ function App() {
 
             </div>
 
-            <button
-              onClick={()=>toggleStatus(task._id)}
-              style={{
-                background: task.status === "Completed" ? "#16a34a" : "#f59e0b",
-                color:"white",
-                border:"none",
-                padding:"6px 12px",
-                borderRadius:"5px"
-              }}
-            >
-              {task.status}
-            </button>
+            <div style={{display:"flex", gap:"10px"}}>
+
+              <button
+                onClick={()=>toggleStatus(task._id)}
+                style={{
+                  background: task.status === "Completed" ? "#16a34a" : "#f59e0b",
+                  color:"white",
+                  border:"none",
+                  padding:"6px 12px",
+                  borderRadius:"5px"
+                }}
+              >
+                {task.status}
+              </button>
+
+              <button
+                onClick={()=>deleteTask(task._id)}
+                style={{
+                  background:"#dc2626",
+                  color:"white",
+                  border:"none",
+                  padding:"6px 12px",
+                  borderRadius:"5px"
+                }}
+              >
+                Delete
+              </button>
+
+            </div>
 
           </div>
 
