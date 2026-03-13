@@ -74,46 +74,53 @@ function App() {
 
   }
 
+  const priorityColor = (p)=>{
+    if(p==="High") return "#ef4444"
+    if(p==="Medium") return "#f59e0b"
+    return "#22c55e"
+  }
+
   const completed = tasks.filter(t=>t.status==="Completed").length
 
   return(
 
     <div style={{
       fontFamily:"Inter, Arial",
-      background:"#f5f5f5",
+      background:"linear-gradient(135deg,#667eea,#764ba2)",
       minHeight:"100vh",
-      padding:"50px"
+      padding:"60px"
     }}>
 
       <div style={{
-        maxWidth:"650px",
+        maxWidth:"800px",
         margin:"auto",
-        background:"#ffffff",
+        background:"rgba(255,255,255,0.95)",
         padding:"40px",
-        borderRadius:"12px",
-        boxShadow:"0 5px 15px rgba(0,0,0,0.05)"
+        borderRadius:"20px",
+        boxShadow:"0 30px 60px rgba(0,0,0,0.25)"
       }}>
 
         <h1 style={{
           textAlign:"center",
-          marginBottom:"10px",
-          fontWeight:"600"
+          marginBottom:"8px",
+          fontSize:"34px",
+          fontWeight:"700"
         }}>
           Smart Task Board
         </h1>
 
         <p style={{
           textAlign:"center",
-          color:"#888",
+          color:"#666",
           marginBottom:"30px"
         }}>
-          {completed} of {tasks.length} tasks completed
+          {completed} / {tasks.length} Tasks Completed
         </p>
 
         <div style={{
           display:"flex",
           gap:"10px",
-          marginBottom:"25px"
+          marginBottom:"30px"
         }}>
 
           <input
@@ -122,18 +129,19 @@ function App() {
             onChange={(e)=>setTitle(e.target.value)}
             style={{
               flex:1,
-              padding:"12px",
+              padding:"14px",
+              borderRadius:"8px",
               border:"1px solid #ddd",
-              borderRadius:"6px"
+              fontSize:"14px"
             }}
           />
 
           <select
             onChange={(e)=>setCategory(e.target.value)}
             style={{
-              border:"1px solid #ddd",
-              borderRadius:"6px",
-              padding:"10px"
+              padding:"12px",
+              borderRadius:"8px",
+              border:"1px solid #ddd"
             }}
           >
             <option>Work</option>
@@ -144,9 +152,9 @@ function App() {
           <select
             onChange={(e)=>setPriority(e.target.value)}
             style={{
-              border:"1px solid #ddd",
-              borderRadius:"6px",
-              padding:"10px"
+              padding:"12px",
+              borderRadius:"8px",
+              border:"1px solid #ddd"
             }}
           >
             <option>High</option>
@@ -157,11 +165,12 @@ function App() {
           <button
             onClick={addTask}
             style={{
-              background:"#111",
+              background:"linear-gradient(135deg,#6366f1,#8b5cf6)",
               color:"white",
               border:"none",
-              padding:"12px 16px",
-              borderRadius:"6px",
+              padding:"14px 18px",
+              borderRadius:"8px",
+              fontWeight:"600",
               cursor:"pointer"
             }}
           >
@@ -174,22 +183,25 @@ function App() {
 
           <div key={task._id}
             style={{
-              background:"#fafafa",
-              padding:"16px",
-              borderRadius:"8px",
-              marginBottom:"10px",
+              background:"#ffffff",
+              padding:"20px",
+              borderRadius:"12px",
+              marginBottom:"12px",
               display:"flex",
               justifyContent:"space-between",
               alignItems:"center",
-              border:"1px solid #eee"
+              borderLeft:`6px solid ${priorityColor(task.priority)}`,
+              boxShadow:"0 10px 20px rgba(0,0,0,0.08)",
+              transition:"0.2s"
             }}
           >
 
             <div>
 
               <div style={{
-                fontWeight:"500",
-                marginBottom:"3px"
+                fontWeight:"600",
+                fontSize:"16px",
+                marginBottom:"4px"
               }}>
                 {task.title}
               </div>
@@ -198,7 +210,19 @@ function App() {
                 fontSize:"12px",
                 color:"#888"
               }}>
-                {task.category} • {task.priority}
+                {task.category}
+
+                <span style={{
+                  marginLeft:"10px",
+                  background:priorityColor(task.priority),
+                  color:"white",
+                  padding:"3px 8px",
+                  borderRadius:"6px",
+                  fontSize:"11px"
+                }}>
+                  {task.priority}
+                </span>
+
               </div>
 
             </div>
@@ -211,11 +235,11 @@ function App() {
               <button
                 onClick={()=>toggleStatus(task._id)}
                 style={{
-                  background: task.status === "Completed" ? "#22c55e" : "#e5e5e5",
-                  color: task.status === "Completed" ? "white" : "#333",
+                  background: task.status === "Completed" ? "#22c55e" : "#f59e0b",
+                  color:"white",
                   border:"none",
-                  padding:"6px 10px",
-                  borderRadius:"5px",
+                  padding:"7px 12px",
+                  borderRadius:"6px",
                   cursor:"pointer",
                   fontSize:"12px"
                 }}
@@ -229,8 +253,8 @@ function App() {
                   background:"#ef4444",
                   color:"white",
                   border:"none",
-                  padding:"6px 10px",
-                  borderRadius:"5px",
+                  padding:"7px 12px",
+                  borderRadius:"6px",
                   cursor:"pointer",
                   fontSize:"12px"
                 }}
